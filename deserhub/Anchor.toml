@@ -11,7 +11,7 @@ deserhub = "9XeszLgbhWuATMavuNkRDP4KPx7aqFugmGTdcP5WuuQX"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
