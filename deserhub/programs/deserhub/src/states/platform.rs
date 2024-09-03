@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 
+//  Singleton for the entire application
 #[account]
 #[derive(InitSpace)]
 pub struct Platform {
