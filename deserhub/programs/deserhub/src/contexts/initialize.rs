@@ -37,7 +37,7 @@ impl<'info> Initialize<'info> {
             DeSerHubError::InvalidNameLength
         );
         require!(
-            listing_fee_bps <= MAX_LISTING_FEE_BPS, // 0 ~ 5%, 0 is for open access papers
+            listing_fee_bps <= MAX_LISTING_FEE_BPS, // 0 ~ 5%,
             DeSerHubError::InvalidListingFee
         );
 
