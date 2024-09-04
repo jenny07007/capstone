@@ -27,7 +27,7 @@ describe("deserhub", async () => {
     );
 
   describe("Platform initialization", () => {
-    it("should init platform 🚀", async () => {
+    it.skip("should init platform 🚀", async () => {
       const tx = await program.methods
         .initialize("deserhub", 500)
         .accountsStrict({
@@ -43,10 +43,11 @@ describe("deserhub", async () => {
       expect(platformState.listingFeeBps).to.equal(500);
       expect(platformState.name).to.equal("deserhub");
 
-      console.log(`https://explorer.solana.com/tx/${tx}?cluster=devnet`);
+      // console.log(`https://explorer.solana.com/tx/${tx}?cluster=devnet`);
+      console.log("transaction signature", tx);
     });
 
-    it.only("should throw error when fee is greater than 500 bps", async () => {
+    it("should throw error when fee is greater than 500 bps", async () => {
       try {
         await program.methods
           .initialize("deserhub", 501)

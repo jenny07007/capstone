@@ -46,8 +46,11 @@ impl<'info> Initialize<'info> {
             listing_fee_bps, // fee goes to platform
             bump: bumps.platform,
             treasury_bump: bumps.treasury,
-            name,
+            name: name.clone(),
         });
+
+        msg!("Initialized platform {}", name);
+
         Ok(())
     }
 }
