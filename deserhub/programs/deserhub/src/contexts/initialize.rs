@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 
 use crate::{error::DeSerHubError, states::Platform};
 
-pub const MAX_LISTING_FEE_BPS: u16 = 500;
+pub const MAX_LISTING_FEE_BPS: u16 = 800; // 8%
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
@@ -17,6 +17,7 @@ pub struct Initialize<'info> {
     )]
     pub platform: Account<'info, Platform>,
 
+    // may use token program in the future for holding tokens
     #[account(
         seeds = [b"treasury", platform.key().as_ref(), admin.key().as_ref()],
         bump,
@@ -32,12 +33,13 @@ impl<'info> Initialize<'info> {
         listing_fee_bps: u16,
         bumps: &InitializeBumps,
     ) -> Result<()> {
+        // we check if the platform name is valid and the listing fee is within the limit
         require!(
-            name.len() > 0 && name.len() <= 32,
+            name.len() > 0 && name.len() <= 20,
             DeSerHubError::InvalidNameLength
         );
         require!(
-            listing_fee_bps <= MAX_LISTING_FEE_BPS, // 0 ~ 5%,
+            listing_fee_bps <= MAX_LISTING_FEE_BPS, // 0 ~ 8%
             DeSerHubError::InvalidListingFee
         );
 
@@ -51,6 +53,17 @@ impl<'info> Initialize<'info> {
 
         msg!("Initialized platform {}", name);
 
+        emit!(PlatformInitialized {
+            name,
+            listing_fee_bps,
+        });
+
         Ok(())
     }
+}
+
+#[event]
+pub struct PlatformInitialized {
+    pub name: String,
+    pub listing_fee_bps: u16,
 }
