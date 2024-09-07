@@ -6,16 +6,20 @@ pub enum DeSerHubError {
     InvalidNameLength,
     #[msg("Invalid listing fee")]
     InvalidListingFee,
-    #[msg("Name cannot be empty")]
-    EmptyName,
-    #[msg("Symbol cannot be empty")]
-    EmptySymbol,
-    #[msg("URI cannot be empty")]
-    EmptyURI,
+    #[msg("Title is empty")]
+    EmptyTitle,
+    #[msg("Description is empty")]
+    EmptyDescription,
+    #[msg("Uri is empty")]
+    EmptyUri,
     #[msg("Invalid price")]
     InvalidPrice,
-    #[msg("Non-transferable mint initialization failed")]
-    NonTransferableInitializationFailed,
-    #[msg("Invalid token program")]
-    InvalidTokenProgram,
+    #[msg("Title is too long")]
+    TitleTooLong,
+    #[msg("Description is too long")]
+    DescriptionTooLong,
+    #[msg("Uri is too long or null")]
+    UriTooLongOrNull,
+    #[msg("Insufficient balance for listing")]
+    InsufficientBalanceForListing,
 }
