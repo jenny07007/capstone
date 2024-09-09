@@ -27,4 +27,12 @@ pub mod deserhub {
         ctx.accounts
             .create_paper(title, description, uri, is_open_access, price)
     }
+
+    pub fn pay_pass(ctx: Context<PayPass>, purchased_at: i64) -> Result<()> {
+        ctx.accounts.pay_pass(purchased_at)
+    }
+
+    pub fn mint_nft(ctx: Context<MintNft>) -> Result<()> {
+        ctx.accounts.mint_nft()
+    }
 }

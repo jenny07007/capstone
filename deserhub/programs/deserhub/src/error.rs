@@ -22,4 +22,6 @@ pub enum DeSerHubError {
     UriTooLongOrNull,
     #[msg("Insufficient balance for listing")]
     InsufficientBalanceForListing,
+    #[msg("The provided researcher is not the author of the paper")]
+    PayPassInvalidResearcher,
 }
