@@ -48,7 +48,7 @@ impl<'info> CreatePaper<'info> {
         description: String,
         uri: String, // encrypted pdf link
         is_open_access: bool,
-        price: u64,
+        mut price: u64,
     ) -> Result<()> {
         require!(!title.is_empty(), DeSerHubError::EmptyTitle);
         require!(!description.is_empty(), DeSerHubError::EmptyDescription);
@@ -76,13 +76,14 @@ impl<'info> CreatePaper<'info> {
         };
         let cpi_ctx = CpiContext::new(self.system_program.to_account_info(), accounts);
 
+        // if the paper is open access, the paper entry price is 0
         match is_open_access {
-            true => self.paper_entry.price = 0,
+            true => price = 0,
             false => {
                 let amount_pay_for_listing =
                     (price * self.platform.listing_fee_bps as u64) / 10_000;
                 require!(
-                    self.researcher.lamports() >= amount_pay_for_listing,
+                    self.researcher.lamports() > amount_pay_for_listing,
                     DeSerHubError::InsufficientBalanceForListing
                 );
                 transfer(cpi_ctx, amount_pay_for_listing)?;
