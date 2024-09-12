@@ -32,7 +32,12 @@ pub mod deserhub {
         ctx.accounts.pay_pass(purchased_at)
     }
 
-    pub fn mint_nft(ctx: Context<MintNft>) -> Result<()> {
-        ctx.accounts.mint_nft()
+    pub fn mint_nft(
+        ctx: Context<MintNft>,
+        name: Option<String>,
+        symbol: Option<String>,
+        uri: String,
+    ) -> Result<()> {
+        ctx.accounts.mint_nft(name, symbol, uri)
     }
 }

@@ -24,4 +24,8 @@ pub enum DeSerHubError {
     InsufficientBalanceForListing,
     #[msg("The provided researcher is not the author of the paper")]
     PayPassInvalidResearcher,
+    #[msg("Signer is not the owner of the paper access pass")]
+    InvalidOwnerForCreateNft,
+    #[msg("Paper access pass already has a minted NFT")]
+    NftAlreadyMintedToPaperAccessPass,
 }
