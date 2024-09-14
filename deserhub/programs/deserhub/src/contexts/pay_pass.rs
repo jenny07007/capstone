@@ -40,8 +40,9 @@ pub struct PayPass<'info> {
 }
 
 impl<'info> PayPass<'info> {
-    pub fn pay_pass(&mut self, purchased_at: i64) -> Result<()> {
+    pub fn pay_pass(&mut self) -> Result<()> {
         let paper_entry = &self.paper_entry;
+        let purchased_at = Clock::get()?.unix_timestamp as i64;
 
         // check the provided researcher is the owner of the paper
         require!(

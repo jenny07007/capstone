@@ -80,8 +80,11 @@ impl<'info> CreatePaper<'info> {
         match is_open_access {
             true => price = 0,
             false => {
-                let amount_pay_for_listing =
-                    (price * self.platform.listing_fee_bps as u64) / 10_000;
+                let amount_pay_for_listing = price
+                    .checked_mul(self.platform.listing_fee_bps as u64)
+                    .and_then(|x: u64| x.checked_div(10_000))
+                    .ok_or(DeSerHubError::ArithmeticOverflow)?;
+
                 require!(
                     self.researcher.lamports() > amount_pay_for_listing,
                     DeSerHubError::InsufficientBalanceForListing

@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("ACPjdtSYAmmfDBmiwhEUCRgXkB9uDDGUXtV7RQ6UgjaB");
+declare_id!("G3oyVx8vZiaPp2TdPb79Ty6CEuLRNRCYYfuAvtLmYU5k");
 
 mod contexts;
 mod states;
@@ -28,14 +28,14 @@ pub mod deserhub {
             .create_paper(title, description, uri, is_open_access, price)
     }
 
-    pub fn pay_pass(ctx: Context<PayPass>, purchased_at: i64) -> Result<()> {
-        ctx.accounts.pay_pass(purchased_at)
+    pub fn pay_pass(ctx: Context<PayPass>) -> Result<()> {
+        ctx.accounts.pay_pass()
     }
 
     pub fn mint_nft(
         ctx: Context<MintNft>,
-        name: Option<String>,
-        symbol: Option<String>,
+        name: String,
+        symbol: String,
         uri: String,
     ) -> Result<()> {
         ctx.accounts.mint_nft(name, symbol, uri)

@@ -49,6 +49,7 @@ impl<'info> Initialize<'info> {
             bump: bumps.platform,
             treasury_bump: bumps.treasury,
             name: name.clone(),
+            nft_counter: 0,
         });
 
         msg!("Initialized platform {}", name);
