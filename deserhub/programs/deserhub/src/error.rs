@@ -30,4 +30,8 @@ pub enum DeSerHubError {
     NftAlreadyMintedToPaperAccessPass,
     #[msg("The arithmetic operation resulted in an overflow.")]
     ArithmeticOverflow,
+    #[msg("Insufficient balance for withdraw")]
+    InsufficientBalanceForWithdraw,
+    #[msg("Withdrawal amount or resulting treasury balance would be below 50 SOL minimum")]
+    WithdrawalBelowMinimumThreshold,
 }

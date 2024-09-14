@@ -188,18 +188,18 @@ export async function verifyNftOwnership(
   }
 
   // find the paper access pass associated with the mint
-  const pass = paperPasses.find((p) =>
+  const paperAccessPass = paperPasses.find((p) =>
     p.account.mint?.equals(paperAccessPassData.mint!),
   );
 
-  if (pass) {
+  if (paperAccessPass) {
     // the paper entry in the pass should be the same as the paper entry
-    expect(pass.account.paperEntry.toBase58()).to.equal(
+    expect(paperAccessPass.account.paperEntry.toBase58()).to.equal(
       paperEntry.publicKey.toBase58(),
     );
 
     // the mint in the pass should be the same as the paper access pass
-    expect(pass.account.mint?.toBase58()).to.equal(
+    expect(paperAccessPass.account.mint?.toBase58()).to.equal(
       paperAccessPassData.mint?.toBase58(),
     );
 
@@ -217,7 +217,9 @@ export async function verifyNftOwnership(
 
     if ("parsed" in ownerAtaInfo.value?.data) {
       const parsedInfo = ownerAtaInfo.value.data.parsed.info;
-      expect(parsedInfo.owner).to.equal(pass.account.owner.toBase58());
+      expect(parsedInfo.owner).to.equal(
+        paperAccessPass.account.owner.toBase58(),
+      );
       expect(parsedInfo.tokenAmount.amount).to.equal("1");
     } else {
       expect.fail("Parsed ATA data is not in the expected format");

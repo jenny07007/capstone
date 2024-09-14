@@ -1,5 +1,3 @@
-// helpers/paymentHelpers.ts
-
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { Deserhub } from "../../target/types/deserhub";
@@ -7,7 +5,7 @@ import { expect } from "chai";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 // pay for a paper access pass successfully
-export async function payForPaperAccessPassSuccessfully(
+export async function payForPaperAccessPass(
   program: Program<Deserhub>,
   provider: anchor.AnchorProvider,
   paperEntry: anchor.web3.Keypair,

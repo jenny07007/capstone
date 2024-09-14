@@ -17,7 +17,7 @@ export async function createPaidAccessPaper(
   const initialTreasuryBalance = await provider.connection.getBalance(
     treasuryPda,
   );
-  const paperPrice = new anchor.BN(1000000000); // 1 SOL in lamports
+  const paperPrice = new anchor.BN(1e9); // 1 SOL in lamports
 
   const tx = await program.methods
     .createPaper(
@@ -117,7 +117,7 @@ export async function expectErrorOnInvalidOpenAccessPaper(
         "Description",
         "https://example.com/invalid",
         true,
-        new anchor.BN(100000000),
+        new anchor.BN(1e9),
       )
       .accountsStrict({
         platform: platformPda,
