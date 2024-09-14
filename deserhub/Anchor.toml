@@ -5,7 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-deserhub = "ACPjdtSYAmmfDBmiwhEUCRgXkB9uDDGUXtV7RQ6UgjaB"
+deserhub = "G3oyVx8vZiaPp2TdPb79Ty6CEuLRNRCYYfuAvtLmYU5k"
 
 [registry]
 url = "https://api.apr.dev"
@@ -15,7 +15,8 @@ cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/deserhub.ts"
+
 
 [[test.genesis]]
 address = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"

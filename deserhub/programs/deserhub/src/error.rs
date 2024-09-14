@@ -28,4 +28,6 @@ pub enum DeSerHubError {
     InvalidOwnerForCreateNft,
     #[msg("Paper access pass already has a minted NFT")]
     NftAlreadyMintedToPaperAccessPass,
+    #[msg("The arithmetic operation resulted in an overflow.")]
+    ArithmeticOverflow,
 }

@@ -65,6 +65,7 @@ pub struct MintNft<'info> {
     pub master_edition: UncheckedAccount<'info>,
 
     #[account(
+        mut,
         seeds = [b"platform", platform.admin.key().as_ref()],
         bump = platform.bump,
     )]
@@ -80,11 +81,24 @@ pub struct MintNft<'info> {
 impl<'info> MintNft<'info> {
     pub fn mint_nft(
         &mut self,
-        name: Option<String>,
-        symbol: Option<String>,
+        name: String,
+        symbol: String,
         uri: String,
     ) -> Result<()> {
         let paper_access_pass = &mut self.paper_access_pass;
+        let current_nft_number = self.platform.nft_counter;
+
+        self.platform.nft_counter += 1;
+
+        // format the dynamic number based on the current nft number
+        let dynamic_number = format!(
+            "#{:0width$}",
+            current_nft_number + 1,
+            width = if current_nft_number < 1000  { 4 } else { 0 }
+        );
+
+        // create the dynamic name
+        let dynamic_name = format!("{} {}", name, dynamic_number);
 
         // the owner of the paper access pass must be the same as the owner of the nft
         if self.owner.key() != paper_access_pass.owner {
@@ -127,8 +141,8 @@ impl<'info> MintNft<'info> {
             CpiContext::new_with_signer(self.token_metadata_program.to_account_info(), accounts, seeds);
 
         let data = DataV2 {
-            name: name.unwrap_or("".to_string()),
-            symbol: symbol.unwrap_or("".to_string()),
+            name: dynamic_name,
+            symbol,
             uri,
             seller_fee_basis_points: 0,
             creators: None,
