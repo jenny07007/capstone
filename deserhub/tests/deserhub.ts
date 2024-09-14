@@ -1,22 +1,7 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { Deserhub } from "../target/types/deserhub";
-import { expect } from "chai";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
-import {
-  TOKEN_PROGRAM_ID,
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  getAssociatedTokenAddress,
-} from "@solana/spl-token";
-import {
-  findMetadataPda,
-  findMasterEditionPda,
-  MPL_TOKEN_METADATA_PROGRAM_ID,
-  mplTokenMetadata,
-} from "@metaplex-foundation/mpl-token-metadata";
-import { publicKey as umi_publicKey } from "@metaplex-foundation/umi";
-import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 
 import {
   initializePlatform,
@@ -28,7 +13,10 @@ import {
   createPaidAccessPaper,
   expectErrorOnInvalidOpenAccessPaper,
 } from "./helpers/paperHelpers";
-import { mintNftAndUpdatePaperAccessPass } from "./helpers/nftHelpers";
+import {
+  mintNftAndUpdatePaperAccessPass,
+  verifyNftOwnership,
+} from "./helpers/nftHelpers";
 import {
   noPaymentForOpenAccessPaper,
   payForPaperAccessPassSuccessfully,
@@ -180,7 +168,16 @@ describe("Deserhub", () => {
       );
     });
 
-    it("should verify the NFT is correctly associated with the Paper Entry and Paper Access Pass", async () => {});
+    it("should verify the NFT is correctly associated with the Paper Entry and Paper Access Pass", async () => {
+      await verifyNftOwnership(
+        program,
+        provider,
+        mint,
+        owner_keypair,
+        paperEntry,
+        paperAccessPassPda,
+      );
+    });
   });
 
   /*
@@ -189,7 +186,7 @@ describe("Deserhub", () => {
   async function airdropToWallets(wallets: anchor.web3.Keypair[]) {
     const airdropPromises = wallets.map((wallet) =>
       provider.connection
-        .requestAirdrop(wallet.publicKey, 2 * LAMPORTS_PER_SOL)
+        .requestAirdrop(wallet.publicKey, 5 * LAMPORTS_PER_SOL)
         .then((signature) => provider.connection.confirmTransaction(signature)),
     );
     await Promise.all(airdropPromises);

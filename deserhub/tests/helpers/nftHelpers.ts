@@ -149,6 +149,84 @@ export async function mintNftAndUpdatePaperAccessPass(
   });
 }
 
+export async function verifyNftOwnership(
+  program: Program<Deserhub>,
+  provider: anchor.AnchorProvider,
+  mint: anchor.web3.Keypair,
+  owner_keypair: anchor.web3.Keypair,
+  paperEntry: anchor.web3.Keypair,
+  paperAccessPassPda: anchor.web3.PublicKey,
+) {
+  // fetch the updated paper access pass account
+  const paperAccessPassData = await program.account.paperAccessPass.fetch(
+    paperAccessPassPda,
+  );
+  // verify that the paper access pass is correctly associated with the paper entry
+  // and that the paper access pass mint is not null
+  expect(paperAccessPassData.paperEntry.toBase58()).to.equal(
+    paperEntry.publicKey.toBase58(),
+  );
+  expect(paperAccessPassData.mint).is.not.null;
+
+  console.log("Paper Access Pass PDA: ", paperAccessPassPda.toBase58());
+
+  // fetch all PaperAccessPass accounts where paper_entry matches
+  const paperPasses = await program.account.paperAccessPass.all([
+    {
+      memcmp: {
+        offset: 41, // offset for paper_entry
+        bytes: paperEntry.publicKey.toBase58(),
+      },
+    },
+  ]);
+
+  if (paperPasses.length === 0) {
+    console.log("No passes found for the given paper entry.");
+    expect.fail("No passes found for the given paper entry.");
+  } else {
+    console.log("Found passes:", paperPasses.length);
+  }
+
+  // find the paper access pass associated with the mint
+  const pass = paperPasses.find((p) =>
+    p.account.mint?.equals(paperAccessPassData.mint!),
+  );
+
+  if (pass) {
+    // the paper entry in the pass should be the same as the paper entry
+    expect(pass.account.paperEntry.toBase58()).to.equal(
+      paperEntry.publicKey.toBase58(),
+    );
+
+    // the mint in the pass should be the same as the paper access pass
+    expect(pass.account.mint?.toBase58()).to.equal(
+      paperAccessPassData.mint?.toBase58(),
+    );
+
+    const owner_ata = await getAssociatedTokenAddress(
+      mint.publicKey,
+      owner_keypair.publicKey,
+    );
+
+    const ownerAtaInfo = await provider.connection.getParsedAccountInfo(
+      owner_ata,
+    );
+
+    console.log("Owner ATA: ", ownerAtaInfo.value?.data);
+    expect(ownerAtaInfo.value).is.not.null;
+
+    if ("parsed" in ownerAtaInfo.value?.data) {
+      const parsedInfo = ownerAtaInfo.value.data.parsed.info;
+      expect(parsedInfo.owner).to.equal(pass.account.owner.toBase58());
+      expect(parsedInfo.tokenAmount.amount).to.equal("1");
+    } else {
+      expect.fail("Parsed ATA data is not in the expected format");
+    }
+  } else {
+    expect.fail("No pass found for the given paper entry.");
+  }
+}
+
 // format the nft number to 4 digits
 export function formatNftNumber(number: number): string {
   return number < 1000
