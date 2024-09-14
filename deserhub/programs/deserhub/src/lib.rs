@@ -40,4 +40,8 @@ pub mod deserhub {
     ) -> Result<()> {
         ctx.accounts.mint_nft(name, symbol, uri)
     }
+
+    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
+        ctx.accounts.withdraw(amount)
+    }
 }

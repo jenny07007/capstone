@@ -19,8 +19,14 @@ import {
 } from "./helpers/nftHelpers";
 import {
   noPaymentForOpenAccessPaper,
-  payForPaperAccessPassSuccessfully,
+  payForPaperAccessPass,
 } from "./helpers/paymentHelpers";
+import { expect } from "chai";
+import {
+  withdrawTreasuryFunds,
+  expectErrorOnExcessiveWithdrawal,
+  expectErrorOnBelowThresholdWithdrawal,
+} from "./helpers/withdrawHelpers";
 
 describe("Deserhub", () => {
   // Setup
@@ -62,6 +68,7 @@ describe("Deserhub", () => {
 
   before(async () => {
     await airdropToWallets([admin_wallet, researcher_keypair, owner_keypair]);
+    await airdropToWallets([treasuryPda], 100 * LAMPORTS_PER_SOL);
   });
 
   /********************************************
@@ -134,7 +141,7 @@ describe("Deserhub", () => {
 
   describe("\n---------------- Pay for Paper Access Pass 🤑 ----------------", () => {
     it("should successfully pay for a paper's access pass", async () => {
-      await payForPaperAccessPassSuccessfully(
+      await payForPaperAccessPass(
         program,
         provider,
         paperEntry,
@@ -178,15 +185,54 @@ describe("Deserhub", () => {
         paperAccessPassPda,
       );
     });
+
+    describe("\n---------------- Withdraw Treasury Funds 💸 ----------------", () => {
+      it("should successfully withdraw treasury funds", async () => {
+        await withdrawTreasuryFunds(
+          program,
+          provider,
+          admin_wallet,
+          platformPda,
+          treasuryPda,
+        );
+      });
+
+      it("should fail when trying to withdraw more than available balance", async () => {
+        await expectErrorOnExcessiveWithdrawal(
+          program,
+          admin_wallet,
+          platformPda,
+          treasuryPda,
+        );
+      });
+
+      it("should fail when trying to withdraw below 50 SOL threshold", async () => {
+        await expectErrorOnBelowThresholdWithdrawal(
+          program,
+          provider,
+          admin_wallet,
+          platformPda,
+          treasuryPda,
+        );
+      });
+    });
   });
 
   /*
     airdrop to wallets
   */
-  async function airdropToWallets(wallets: anchor.web3.Keypair[]) {
-    const airdropPromises = wallets.map((wallet) =>
+  async function airdropToWallets(
+    recipients: (anchor.web3.Keypair | PublicKey)[],
+    amount: number = 5 * LAMPORTS_PER_SOL,
+  ) {
+    const airdropPromises = recipients.map((recipient) =>
       provider.connection
-        .requestAirdrop(wallet.publicKey, 5 * LAMPORTS_PER_SOL)
+        .requestAirdrop(
+          recipient instanceof anchor.web3.Keypair
+            ? recipient.publicKey
+            : recipient,
+          amount,
+        )
         .then((signature) => provider.connection.confirmTransaction(signature)),
     );
     await Promise.all(airdropPromises);

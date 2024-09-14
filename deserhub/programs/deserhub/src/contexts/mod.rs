@@ -6,3 +6,5 @@ pub mod pay_pass;
 pub use pay_pass::*;
 pub mod mint_nft;
 pub use mint_nft::*;
+pub mod withdraw;
+pub use withdraw::*;
