@@ -27,9 +27,9 @@ pub struct PayPass<'info> {
     pub paper_access_pass: Account<'info, PaperAccessPass>,
 
     #[account(
-			seeds = [b"platform", platform.admin.key().as_ref()],
-			bump = platform.bump,
-		)]
+        seeds = [b"platform", platform.admin.key().as_ref()],
+        bump = platform.bump,
+    )]
     pub platform: Account<'info, Platform>,
 
     // researcher has paid the listing fee

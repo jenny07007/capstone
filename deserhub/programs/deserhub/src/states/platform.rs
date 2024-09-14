@@ -10,5 +10,5 @@ pub struct Platform {
     pub treasury_bump: u8,
     #[max_len(20)]
     pub name: String,
-    pub nft_counter: u64, // counter for nfts minted for this paper
+    pub nft_counter: u64, // counter for nfts
 }
