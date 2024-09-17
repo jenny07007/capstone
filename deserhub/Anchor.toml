@@ -5,7 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-deserhub = "G3oyVx8vZiaPp2TdPb79Ty6CEuLRNRCYYfuAvtLmYU5k"
+deserhub = "J4BSb2jYCnLsxAiaEeVktKfSjbAwUiDV8X5KzFhqkR2T"
 
 [registry]
 url = "https://api.apr.dev"
