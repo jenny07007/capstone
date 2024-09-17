@@ -12,7 +12,7 @@ export async function initializePlatform(
   listingFeeBps: number,
 ) {
   const tx = await program.methods
-    .initialize("deserhub", listingFeeBps)
+    .initialize("DeSerHub", listingFeeBps)
     .accountsStrict({
       admin: admin_wallet.publicKey,
       platform: platformPda,
@@ -24,7 +24,7 @@ export async function initializePlatform(
 
   const platformState = await program.account.platform.fetch(platformPda);
   expect(platformState.listingFeeBps).to.equal(listingFeeBps);
-  expect(platformState.name).to.equal("deserhub");
+  expect(platformState.name).to.equal(/deserhub/i);
 
   console.log(`Initialize platform transaction signature: ${tx}`);
 }

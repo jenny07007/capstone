@@ -1,5 +1,11 @@
 <!-- markdownlint-disable -->
 
+### Deploy
+
+Program ID: J4BSb2jYCnLsxAiaEeVktKfSjbAwUiDV8X5KzFhqkR2T
+
+[Devnet](https://explorer.solana.com/address/J4BSb2jYCnLsxAiaEeVktKfSjbAwUiDV8X5KzFhqkR2T?cluster=devnet)
+
 ### For testing metaplex token metadata program
 
 ```sh
