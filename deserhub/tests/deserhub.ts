@@ -28,6 +28,11 @@ import {
   expectErrorOnBelowThresholdWithdrawal,
 } from "./helpers/withdrawHelpers";
 
+// devnet wallets for testing
+import admin_wallet_json from "../wallets/admin_wallet.json";
+import researcher_wallet_json from "../wallets/researcher_wallet.json";
+import owner_wallet_json from "../wallets/owner_wallet.json";
+
 describe("Deserhub", () => {
   // Setup
   const provider = anchor.AnchorProvider.env();
@@ -38,6 +43,16 @@ describe("Deserhub", () => {
   const admin_wallet = anchor.web3.Keypair.generate();
   const researcher_keypair = anchor.web3.Keypair.generate();
   const owner_keypair = anchor.web3.Keypair.generate();
+
+  // const admin_wallet = anchor.web3.Keypair.fromSecretKey(
+  //   Uint8Array.from(JSON.parse(JSON.stringify(admin_wallet_json))),
+  // );
+  // const researcher_keypair = anchor.web3.Keypair.fromSecretKey(
+  //   Uint8Array.from(JSON.parse(JSON.stringify(researcher_wallet_json))),
+  // );
+  // const owner_keypair = anchor.web3.Keypair.fromSecretKey(
+  //   Uint8Array.from(JSON.parse(JSON.stringify(owner_wallet_json))),
+  // );
   const mint = anchor.web3.Keypair.generate();
   const listingFeeBps = 800;
   const paperEntry = anchor.web3.Keypair.generate();
@@ -66,6 +81,7 @@ describe("Deserhub", () => {
     program.programId,
   );
 
+  // Airdrop to wallets for local testing
   before(async () => {
     await airdropToWallets([admin_wallet, researcher_keypair, owner_keypair]);
     await airdropToWallets([treasuryPda], 100 * LAMPORTS_PER_SOL);
@@ -87,6 +103,7 @@ describe("Deserhub", () => {
     });
 
     // This will fail if the platform id is already exists ⬆︎
+    // change the name of the platform
     it.skip("should throw error when fee is greater than 800 bps", async () => {
       await expectErrorOnInvalidFee(
         program,
@@ -219,7 +236,7 @@ describe("Deserhub", () => {
   });
 
   /*
-    airdrop to wallets
+    airdrop to wallets for local testing
   */
   async function airdropToWallets(
     recipients: (anchor.web3.Keypair | PublicKey)[],

@@ -2,6 +2,34 @@
 
 # DeResHub
 
+**Program ID**: J4BSb2jYCnLsxAiaEeVktKfSjbAwUiDV8X5KzFhqkR2T
+
+[Devnet](https://explorer.solana.com/address/J4BSb2jYCnLsxAiaEeVktKfSjbAwUiDV8X5KzFhqkR2T?cluster=devnet)
+
+## How to use
+
+**For Localnet**
+
+```bash
+anchor test
+```
+
+**For Devnet**
+
+```bash
+anchor test --provider.cluster devnet
+```
+
+```typescript
+const umi = createUmi("https://api.devnet.solana.com")
+  .use(mplTokenMetadata())
+  .use(walletAdapterIdentity(owner_keypair));
+```
+
+**Please note that the minimum amount of SOL for withdrawal is 50 SOL. So, this might fail on devnet testing.**
+
+## Overview
+
 <div align="center">
 	<img src="overview.png" width="800"/>
 </div>
@@ -24,8 +52,8 @@ For the MVP for this capstone project, we will foucus on the research side first
 
 [Persona and User Story](persona_usr_story.md)
 
-## Features
-
 ## Architecture
 
-## How to use
+<div align="center">
+	<img src="arc.png" width="800"/>
+</div>
